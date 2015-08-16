@@ -43,6 +43,9 @@ func (t *SplayTree) Size() int {
 }
 
 func (t *SplayTree) Splay(n *SplayNode) {
+	if n == nil {
+		return
+	}
 	for n.parent != nil {
 		parent := n.parent
 		grandParent := parent.parent
@@ -161,8 +164,16 @@ func (t *SplayTree) Insert(key Item, replace bool) Item {
 	return nil
 }
 
-// TODO Incomplete
-func (t *SplayTree) Find(key Item) Item {
+func (t *SplayTree) find(key Item) Item {
+	node := t.findNode(key)
+	if node != nil {
+		t.Splay(node)
+		return node.Item
+	}
+	return nil
+}
+
+func (t *SplayTree) findNode(key Item) *SplayNode {
 	cur := t.GetRoot()
 	for cur != nil {
 		switch {
@@ -171,15 +182,52 @@ func (t *SplayTree) Find(key Item) Item {
 		case key.Less(cur):
 			cur = cur.left
 		default:
-			return cur.Item
+			t.Splay(cur)
+			return cur
 		}
 	}
 	return nil
 }
 
-// TODO
-func (t *SplayTree) Remove(key Item) {
+func (t *SplayTree) Remove(key Item) Item {
+	node := t.findNode(key)
+	if node != nil {
+		t.remove(node)
+		return node.Item
+	}
+	return nil
+}
 
+func (t *SplayTree) remove(n *SplayNode) {
+	if n == nil {
+		return
+	}
+
+	t.Splay(n)
+	if n.left != nil && n.right != nil {
+		// find inorder predecessor
+		prev := n.left
+		for prev.right != nil {
+			prev = prev.right
+		}
+		prev.right = n.right
+		n.right.parent = prev
+		n.left.parent = nil
+		t.SetRoot(n.left)
+	} else if n.right != nil {
+		n.right.parent = nil
+		t.SetRoot(n.right)
+	} else if n.left != nil {
+		n.left.parent = nil
+		t.SetRoot(n.left)
+	} else {
+		t.SetRoot(nil)
+	}
+	n.parent = nil
+	n.right = nil
+	n.left = nil
+	n = nil
+	t.size--
 }
 
 // TODO
