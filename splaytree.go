@@ -80,7 +80,7 @@ func (t *SplayTree) Splay(n *SplayNode) {
 
 func (t *SplayTree) makeLeftChildParent(x, y *SplayNode) {
 	if x == nil || y == nil || x.parent != y || y.left != x {
-		panic("Anomaly in Tree structure")
+		panic("Anomaly in Tree structure makeLeftChildParent")
 	}
 
 	if y.parent != nil {
@@ -103,7 +103,7 @@ func (t *SplayTree) makeLeftChildParent(x, y *SplayNode) {
 
 func (t *SplayTree) makeRightChildParent(x, y *SplayNode) {
 	if x == nil || y == nil || x.parent != y || y.right != x {
-		panic("Anomaly in Tree structure")
+		panic("Anomaly in Tree structure makeRightChildParent")
 	}
 
 	if y.parent != nil {
@@ -139,14 +139,14 @@ func (t *SplayTree) Insert(key Item, replace bool) Item {
 	newNode := newSplayNode(key)
 	for cur != nil {
 		switch {
-		case cur.Less(key):
+		case cur.Item.Less(key):
 			if cur.right == nil {
 				t.size++
 				cur.right = newNode
 				cur.right.parent = cur
 			}
 			cur = cur.right
-		case key.Less(cur):
+		case key.Less(cur.Item):
 			if cur.left == nil {
 				t.size++
 				cur.left = newNode
@@ -164,10 +164,9 @@ func (t *SplayTree) Insert(key Item, replace bool) Item {
 	return nil
 }
 
-func (t *SplayTree) find(key Item) Item {
+func (t *SplayTree) Find(key Item) Item {
 	node := t.findNode(key)
 	if node != nil {
-		t.Splay(node)
 		return node.Item
 	}
 	return nil
@@ -177,9 +176,9 @@ func (t *SplayTree) findNode(key Item) *SplayNode {
 	cur := t.GetRoot()
 	for cur != nil {
 		switch {
-		case cur.Less(key):
+		case cur.Item.Less(key):
 			cur = cur.right
-		case key.Less(cur):
+		case key.Less(cur.Item):
 			cur = cur.left
 		default:
 			t.Splay(cur)
