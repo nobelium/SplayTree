@@ -8,7 +8,7 @@ type SplayNode struct {
 }
 
 func newSplayNode(item Item) *SplayNode {
-	return &SplayNode{Item: item}
+	return &SplayNode{Item: item, left: nil, right: nil, parent: nil}
 }
 
 func (n *SplayNode) replaceItem(item Item) Item {
@@ -56,7 +56,7 @@ func (t *SplayTree) Splay(n *SplayNode) {
 				t.makeRightChildParent(n, parent)
 			}
 		} else {
-			if n == parent.right {
+			if n == parent.left {
 				if parent == grandParent.left {
 					t.makeLeftChildParent(parent, grandParent)
 					t.makeLeftChildParent(n, parent)

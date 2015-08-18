@@ -29,7 +29,7 @@ func main() {
 	tree.Insert(var3, true)
 	tree.Insert(var4, true)
 
-	temp := Var{Key: 2, Val: "Doesn't matter"}
+	temp := Var{Key: 4, Val: "Doesn't matter"}
 	res := tree.Find(temp)
 	fmt.Println("Found splaynode: " + string(temp.Key) + " val: " + res.(Var).Val)
 
