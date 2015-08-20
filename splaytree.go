@@ -228,8 +228,3 @@ func (t *SplayTree) remove(n *SplayNode) {
 	n = nil
 	t.size--
 }
-
-// TODO
-func (t *SplayTree) Iterator() {
-
-}
